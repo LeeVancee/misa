@@ -1,7 +1,7 @@
 <template>
   <form class="validate-form-container">
     <slot name="default"></slot>
-    <div class="submit-area" @click.prevent="submitFrom">
+    <div class="submit-area" @click.prevent="submitForm">
       <slot name="submit">
         <button class="btn btn-primary">提交</button>
       </slot>
@@ -18,13 +18,13 @@ type Events = {
 }
 export const emitter = mitt<Events>()
 export default defineComponent({
-  emits: ['from-submit'],
+  emits: ['form-submit'],
   setup(props, context) {
     let funcArr: ValidateFunc[] = []
 
-    const submitFrom = () => {
+    const submitForm = () => {
       const result = funcArr.map((func) => func()).every((result) => result)
-      context.emit('from-submit', result)
+      context.emit('form-submit', result)
     }
     const callback = (func: ValidateFunc) => {
       funcArr.push(func)
@@ -34,7 +34,7 @@ export default defineComponent({
       emitter.off('form-item-created', callback)
       funcArr = []
     })
-    return { submitFrom }
+    return { submitForm }
   }
 })
 </script>
